@@ -3,7 +3,10 @@ import Image from "next/image";
 
 const DashboardPage = () => {
     return (
-        <p>Dashboard Page (Protected)</p>
+        <div>
+            <p>Dashboard Page (Protected)</p>
+           
+        </div>
 
     )
 }
