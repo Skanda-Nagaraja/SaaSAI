@@ -1,12 +1,13 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-});
 
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY 
+  });
+
+
 
 export async function POST(req: Request) {
     try {
@@ -23,17 +24,17 @@ export async function POST(req: Request) {
         }
 
         if (!message) {
-            return new NextResponse("Message is required", { status: 400 });
+                return new NextResponse("Message is required", { status: 400 });
         }
 
-        const response = await openai.createCompletion({
-            model: "gpt-3.5-turbo",
-            prompt: message,
-            max_tokens: 100, // Example, adjust as needed
-        });
+        const chatCompletion = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [{"role": "user", "content": "Hello!"}],
+            });
 
         // Handle the response here
-        return new NextResponse(JSON.stringify(response.data), { status: 200 });
+        
+        return new NextResponse(JSON.stringify(chatCompletion.choices), { status: 200 });
 
     } catch (error) {
         console.log("[CONVERSATION_ERROR]", error);
